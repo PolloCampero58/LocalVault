@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalVault - Official Reference Manual</title>
+    <style>
+        :root {
+            /* Core Palette */
+            --bg-base: #060b13;
+            --bg-surface: #0d1522;
+            --bg-surface-elevated: #152033;
+            --topbar-bg: rgba(6, 11, 19, 0.85);
+            
+            /* Accents */
+            --accent-cyan: #00E5FF;
+            --accent-cyan-glow: rgba(0, 229, 255, 0.2);
+            --accent-blue: #3B82F6;
+            --accent-blue-deep: #1d4ed8;
+            
+            /* Text */
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-tertiary: #64748B;
+            
+            /* Borders & UI */
+            --border-light: rgba(255, 255, 255, 0.05);
+            --border-strong: rgba(0, 229, 255, 0.2);
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            
+            /* Typography */
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Top Navigation Bar --- */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: var(--topbar-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .topbar a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .topbar a:hover {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px var(--accent-cyan-glow);
+        }
+
+        .topbar .brand {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+        
+        .topbar .brand span {
+            color: var(--accent-cyan);
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 60px);
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-light);
+            padding: 2rem 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .sidebar-header h2 {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background-color: var(--bg-surface-elevated);
+            color: var(--text-primary);
+        }
+
+        .nav-links a.active {
+            background-color: var(--accent-cyan-glow);
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        /* --- Main Content --- */
+        .main-wrapper {
+            margin-left: 280px;
+            margin-top: 60px;
+            width: calc(100% - 280px);
+            display: flex;
+            justify-content: center;
+        }
+
+        .content-container {
+            max-width: 900px;
+            width: 100%;
+            padding: 4rem 3rem 8rem 3rem;
+        }
+
+        /* Typography Formatting */
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+            scroll-margin-top: 100px; /* For scrollspy offset */
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Code Blocks */
+        code {
+            font-family: var(--font-mono);
+            background-color: var(--bg-surface-elevated);
+            color: var(--accent-cyan);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+            border: 1px solid var(--border-light);
+        }
+
+        pre {
+            background-color: var(--bg-surface);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: var(--text-primary);
+            padding: 0;
+            border: none;
+            font-size: 0.9em;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+        }
+
+        li::marker {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+
+        /* Callouts / Admonitions */
+        .callout {
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin: 2rem 0;
+            background-color: var(--bg-surface-elevated);
+            border-left: 4px solid var(--accent-blue);
+            position: relative;
+        }
+
+        .callout.warning {
+            border-left-color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+
+        .callout.success {
+            border-left-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .callout h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .callout.warning h4 { color: #f59e0b; }
+        .callout.success h4 { color: #10b981; }
+        .callout h4 { color: var(--accent-blue); }
+
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .feature-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: var(--border-strong);
+        }
+
+        .feature-card .icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-cyan-glow);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--accent-cyan);
+        }
+
+        .feature-card h4 {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        /* Advanced SVG Illustrations */
+        .svg-container {
+            width: 100%;
+            background: linear-gradient(145deg, var(--bg-surface), #0a111a);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        /* Subtle grid background for SVGs */
+        .svg-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .svg-illustration {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+        }
+
+        /* FAQ Accordion Style */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            transition: border-color 0.2s;
+        }
+        
+        .faq-item:hover {
+            border-color: var(--border-strong);
+        }
+
+        .faq-question {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .faq-question::before {
+            content: 'Q.';
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-weight: 800;
+        }
+
+        .faq-answer {
+            color: var(--text-secondary);
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        /* Badges / Keystrokes */
+        kbd {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.8em;
+            color: var(--text-primary);
+            background-color: var(--bg-surface-elevated);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+            margin: 0 0.2rem;
+        }
+
+        .tag-badge {
+            display: inline-block;
+            background-color: var(--accent-cyan-glow);
+            color: var(--accent-cyan);
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(0, 229, 255, 0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+        <a href="https://gregorigin.com" target="_blank" class="brand">
+            GregOrigin<span>.</span>
+        </a>
+        <a href="https://fab.com" target="_blank">
+            Fab.com
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+        </a>
+    </header>
+
+    <!-- Sidebar / ScrollSpy Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>LocalVault Manual</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#introduction" class="active">1. Introduction</a></li>
+            <li><a href="#philosophy">2. The LocalVault Philosophy</a></li>
+            <li><a href="#setup">3. Initial Configuration</a></li>
+            <li><a href="#syncing">4. The Sync Engine (Zero-API)</a></li>
+            <li><a href="#organization">5. Library Organization</a></li>
+            <li><a href="#backup">6. True Offline Backup</a></li>
+            <li><a href="#architecture">7. Technical Architecture</a></li>
+            <li><a href="#troubleshooting">8. Troubleshooting & FAQ</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Documentation Content -->
+    <main class="main-wrapper">
+        <div class="content-container">
+
+            <h1 id="introduction">LocalVault Reference Manual</h1>
+            <p>Welcome to the official documentation for <strong>LocalVault</strong>. Designed specifically for Unreal Engine 5.7+, LocalVault is an essential utility plugin that bridges the gap between Epic's cloud-based Fab ecosystem and your local development environment. It provides unprecedented control over your digital assets through instant offline search, custom metadata tagging, and robust, true-offline backup capabilities.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    </div>
+                    <h4>Offline Backups</h4>
+                    <p>Extract cached Fab assets directly to a secure, permanent directory on your hard drive.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    </div>
+                    <h4>Persistent Tagging</h4>
+                    <p>Apply custom metadata to your library. Search and filter instantly without internet latency.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <h4>Zero-API Security</h4>
+                    <p>No Epic login required. We natively scan the engine's local cache, ensuring your credentials remain yours.</p>
+                </div>
+            </div>
+
+            <!-- --- SECTION 2 --- -->
+            <h2 id="philosophy">The LocalVault Philosophy</h2>
+            <p>With the transition from the legacy Unreal Engine Marketplace to the unified <strong>Fab</strong> ecosystem, the way developers access assets has fundamentally changed. Epic's current infrastructure relies heavily on "on-demand" cloud access, streaming assets into hidden, obscured cache directories (<code>FFabAssetsCache</code>).</p>
+            <p>While convenient for discovery, this creates a critical vulnerability for independent studios: <strong>Asset Permanence</strong>. What happens if an asset is delisted? What if you are working offline on a laptop? What if you need to migrate your massive library to a secure internal NAS?</p>
+            <p>LocalVault was engineered to solve this. It operates on the principle that <strong>if you bought it, you should hold the raw files</strong>. It acts as a middleman—reading the temporary cache Epic creates, allowing you to organize it, and then permanently backing it up to a standardized directory format.</p>
+
+            <!-- SVG: Architecture Flow -->
+            <div class="svg-container">
+                <svg class="svg-illustration" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Cloud -->
+                    <path d="M 120 140 Q 120 100 160 100 Q 180 70 220 80 Q 260 70 270 110 Q 300 120 290 150 Q 310 180 270 190 Q 230 210 180 190 Q 130 200 120 160 Z" fill="#152033" stroke="#3B82F6" stroke-width="3"/>
+                    <text x="205" y="145" fill="#E2E8F0" font-size="20" font-weight="bold" text-anchor="middle">Fab Cloud</text>
+                    <text x="205" y="165" fill="#94A3B8" font-size="12" text-anchor="middle">api.fab.com</text>
+
+                    <!-- Stream to UE5 -->
+                    <path d="M 300 145 L 390 145" stroke="#3B82F6" stroke-width="4" stroke-dasharray="10 5" fill="none">
+                        <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" repeatCount="indefinite" />
+                    </path>
+                    <polygon points="380,135 400,145 380,155" fill="#3B82F6"/>
+                    <text x="350" y="130" fill="#3B82F6" font-size="12" text-anchor="middle" font-weight="bold">Unreal Editor</text>
+
+                    <!-- Hidden Cache -->
+                    <rect x="410" y="100" width="140" height="90" rx="8" fill="#111A27" stroke="#64748B" stroke-width="2"/>
+                    <text x="480" y="135" fill="#E2E8F0" font-size="16" font-weight="bold" text-anchor="middle">Hidden Cache</text>
+                    <text x="480" y="155" fill="#64748B" font-size="11" text-anchor="middle" font-family="monospace">AppData/Local/...</text>
+                    <text x="480" y="175" fill="#f59e0b" font-size="11" text-anchor="middle" font-weight="bold">(Volatile)</text>
+
+                    <!-- Extraction to LocalVault -->
+                    <path d="M 560 145 L 630 145" stroke="#00E5FF" stroke-width="4" fill="none"/>
+                    <polygon points="620,135 640,145 620,155" fill="#00E5FF"/>
+                    <text x="600" y="130" fill="#00E5FF" font-size="12" text-anchor="middle" font-weight="bold">LocalVault Copy</text>
+
+                    <!-- Secure Vault -->
+                    <rect x="650" y="80" width="130" height="130" rx="12" fill="#1E3A5F" stroke="#00E5FF" stroke-width="3"/>
+                    <path d="M 715 100 L 715 120 M 695 120 L 735 120 M 695 120 L 695 150 L 735 150 L 735 120" stroke="#00E5FF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    <text x="715" y="175" fill="#ffffff" font-size="18" font-weight="bold" text-anchor="middle">Permanent</text>
+                    <text x="715" y="195" fill="#00E5FF" font-size="14" text-anchor="middle">Storage</text>
+                </svg>
+            </div>
+
+
+            <!-- --- SECTION 3 --- -->
+            <h2 id="setup">Initial Configuration</h2>
+            <p>To ensure your assets are backed up to the correct location, you must configure the plugin immediately after installation.</p>
+            
+            <ol>
+                <li>Open your Unreal Engine project.</li>
+                <li>Navigate to <code>Edit > Project Settings</code>.</li>
+                <li>Scroll down the left pane to the <strong>Plugins</strong> section and select <strong>LocalVault</strong>.</li>
+                <li>Locate the property: <strong>Local Vault Storage Path</strong>.</li>
+                <li>Click the <kbd>...</kbd> button and select an empty, high-capacity directory on your machine (e.g., <code>D:\UnrealVaultArchive</code>).</li>
+            </ol>
+
+            <div class="callout warning">
+                <h4>Drive Space Warning</h4>
+                <p>Unreal Engine assets, particularly environment megapacks and MetaHumans, can consume hundreds of gigabytes. Ensure the drive you select for your Local Vault Storage Path has ample free space. Do not use your primary OS drive (C:\) if space is limited.</p>
+            </div>
+
+            <p>Once configured, you can access the main tool window via the Editor Menu: <code>Window > Asset Management > LocalVault Browser</code>.</p>
+
+
+            <!-- --- SECTION 4 --- -->
+            <h2 id="syncing">The Sync Engine (Zero-API)</h2>
+            <p>Epic Games does not currently provide a public REST API for developers to securely query a user's Fab inventory without complex OAuth integration. Instead of asking you to log in to our tool, LocalVault uses a <strong>Zero-API Strategy</strong>.</p>
+            
+            <p>When you click the <span class="tag-badge">Sync with Epic</span> button in the LocalVault Browser, the following occurs synchronously:</p>
+            <ul>
+                <li>The plugin queries the engine's internal C++ module: <code>FFabAssetsCache::GetCachedAssets()</code>.</li>
+                <li>It reads the directory structure of the hidden local cache generated by the Unreal Editor.</li>
+                <li>It extracts the folder names to construct human-readable asset titles.</li>
+                <li>It registers these items in the LocalVault JSON Database, marking them with a system tag.</li>
+            </ul>
+
+            <div class="callout">
+                <h4>Crucial Workflow Step</h4>
+                <p>Because LocalVault reads the local cache, <strong>it can only "see" assets that you have physically downloaded through the Unreal Editor at least once.</strong> If you buy an item on the Fab website but do not download it in the Editor, LocalVault will not know you own it.</p>
+            </div>
+
+
+            <!-- --- SECTION 5 --- -->
+            <h2 id="organization">Library Organization</h2>
+            <p>The LocalVault Browser is split into two primary areas: the <strong>Metadata Sidebar</strong> (left) and the <strong>Asset Grid/List</strong> (right).</p>
+            
+            <h3>Applying Tags</h3>
+            <p>You can apply persistent, offline tags to any asset to group them by project, genre, or utility.</p>
+            <ol>
+                <li>Select one or multiple assets in the main view (use <kbd>Ctrl+Click</kbd> or <kbd>Shift+Click</kbd>).</li>
+                <li>In the bottom left corner of the sidebar, type your desired tag into the text input field.</li>
+                <li>Click the <kbd>+</kbd> button or press <kbd>Enter</kbd>.</li>
+            </ol>
+            <p>The tag will instantly appear as a <span class="tag-badge">Pill</span> under the asset's title. Selecting the tag from the sidebar list will instantly filter your entire view to show only assets with that tag. Because the database is stored entirely locally in memory, this search is instantaneous—no loading spinners.</p>
+
+
+            <!-- --- SECTION 6 --- -->
+            <h2 id="backup">True Offline Backup</h2>
+            <p>This is the core functionality of the plugin. The temporary cache used by the Epic Editor can be wiped, corrupted, or automatically managed by the engine. To secure your assets, you must perform a Bulk Download.</p>
+
+            <h3>Execution</h3>
+            <ol>
+                <li>Select the assets you wish to back up in the LocalVault Browser.</li>
+                <li>Click the large blue <kbd>Download Assets</kbd> button in the top toolbar.</li>
+                <li>Check your <strong>Output Log</strong>.</li>
+            </ol>
+
+            <p>Under the hood, LocalVault executes a deep, multi-threaded directory copy. It takes the raw files from the obscure <code>AppData</code> cache path and cleanly duplicates them into your configured <code>LocalVaultStoragePath</code>, creating a neat folder using the Asset's readable title.</p>
+            
+            <pre><code>// Example Directory Structure after Backup
+D:\UnrealVaultArchive\
+├── Cyberpunk Character Pack\
+│   ├── Content\
+│   └── Config\
+├── Stylized Water Shader\
+│   └── Content\
+└── Ultimate FPS Weapons\
+    └── Content\</code></pre>
+    
+            <div class="callout success">
+                <h4>Complete Ownership</h4>
+                <p>Once backed up, these folders are yours. You can migrate them to an external hard drive, zip them for cold storage, or drag-and-drop their <code>Content</code> folders directly into new Unreal projects without ever opening the Epic Launcher.</p>
+            </div>
+
+
+            <!-- --- SECTION 7 --- -->
+            <h2 id="architecture">Technical Architecture</h2>
+            <p>For developers and studio IT managers, understanding where LocalVault stores its data is critical for version control and workspace migration.</p>
+
+            <ul>
+                <li><strong>Database Location:</strong> <code>[ProjectRoot]/Saved/LocalVault/Database.json</code></li>
+                <li><strong>Format:</strong> Standard JSON. Can be manually edited or migrated.</li>
+                <li><strong>Settings Location:</strong> <code>[ProjectRoot]/Config/DefaultEditorPerProjectUserSettings.ini</code></li>
+                <li><strong>Engine Dependency:</strong> Requires Unreal Engine 5.7+ due to reliance on the internal <code>Fab</code> C++ module.</li>
+            </ul>
+
+
+            <!-- --- SECTION 8 --- -->
+            <h2 id="troubleshooting">Troubleshooting & FAQ</h2>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">Why does the Output Log say "0 assets found" when I click Sync?</div>
+                    <div class="faq-answer">
+                        This means your <code>FFabAssetsCache</code> is completely empty. LocalVault operates by scanning the assets you have downloaded via the native Editor. 
+                        <br><br><strong>Fix:</strong> Open the official Epic Fab window in UE5, download at least one asset to your local machine, and click Sync again.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Why did the backup fail with a copy error?</div>
+                    <div class="faq-answer">
+                        This almost exclusively occurs due to Windows path-length limitations (the 260 character <code>MAX_PATH</code> limit) or insufficient drive space.
+                        <br><br><strong>Fix:</strong> Ensure your configured Storage Path is close to the root of a drive (e.g., <code>D:\Vault</code> instead of <code>D:\MyFiles\Projects\UE5\Plugins\Archives\Vault</code>). Check your available disk space.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Can I share my tagged database with my team?</div>
+                    <div class="faq-answer">
+                        Yes! If you are using Perforce or Git, simply ensure that <code>Saved/LocalVault/Database.json</code> is <strong>not</strong> ignored by your version control (Unreal ignores the <code>Saved</code> folder by default). Add a specific inclusion rule for the <code>LocalVault</code> subfolder. When your team pulls the file, they will see your custom tags.
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-top: 4rem; text-align: center; color: var(--text-tertiary); font-size: 0.9rem;">
+                LocalVault Plugin &copy; 2026 GregOrigin. Unreal Engine and Fab are trademarks of Epic Games, Inc.
+            </p>
+
+        </div>
+    </main>
+
+    <!-- ScrollSpy Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sections = document.querySelectorAll("h1, h2");
+            const navLinks = document.querySelectorAll(".nav-links a");
+
+            window.addEventListener("scroll", () => {
+                let current = "";
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    // Add a slight offset to account for the fixed header
+                    if (scrollY >= (sectionTop - 150)) {
+                        current = section.getAttribute("id");
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove("active");
+                    if (link.getAttribute("href").includes(current)) {
+                        link.classList.add("active");
+                    }
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

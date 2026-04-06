@@ -1,0 +1,31 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "LocalVault Core",
+	"Description": "Take control of your library. Instant offline search and custom tagging for your Fab portfolio. Upgrade to Pro for secure local backups and bulk downloading.",
+	"Category": "Asset Management",
+	"CreatedBy": "GregOrigin",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.7.0",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "LocalVault",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Fab",
+			"Enabled": true
+		}
+	]
+}
