@@ -4,6 +4,9 @@
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
 
+[Watch a video on v0.1](https://www.youtube.com/watch?v=Yl1r3YHAncg) <br>
+[Watch a video on v0.2](https://www.youtube.com/watch?v=s9BQGs9g1SE)
+
 <br/>
 
 [![LocalVault Demo](https://img.youtube.com/vi/Yl1r3YHAncg/maxresdefault.jpg)](https://www.youtube.com/watch?v=Yl1r3YHAncg)
